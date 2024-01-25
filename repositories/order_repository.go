@@ -6,7 +6,7 @@ import (
 )
 
 type OrderRepository interface {
-	GetAllOrders(page, pageSize int, orderName, product, startDate, endDate string) ([]models.Order, error)
+	GetAllOrders(page, pageSize int, orderName, product, startDate, endDate string) ([]models.Order, int, error)
 }
 
 type orderRepository struct {
@@ -17,8 +17,9 @@ func NewOrderRepository(db *gorm.DB) OrderRepository {
 	return &orderRepository{db: db}
 }
 
-func (r *orderRepository) GetAllOrders(page, pageSize int, orderName, product, startDate, endDate string) ([]models.Order, error) {
+func (r *orderRepository) GetAllOrders(page, pageSize int, orderName, product, startDate, endDate string) ([]models.Order, int, error) {
 	var orders []models.Order
+	var totalCount int64
 	offset := (page - 1) * pageSize
 	query := r.db
 
@@ -36,8 +37,12 @@ func (r *orderRepository) GetAllOrders(page, pageSize int, orderName, product, s
 		query = query.Where("created_at <= ?", endDate)
 	}
 
-	if err := query.Preload("OrderItems.Delivery").Preload("Customer").Preload("Customer.Company").Offset(offset).Limit(pageSize).Find(&orders).Error; err != nil {
-		return nil, err
+	if err := query.Model(&models.Order{}).Count(&totalCount).Error; err != nil {
+		return nil, 0, err
 	}
-	return orders, nil
+
+	if err := query.Preload("OrderItems.Delivery").Preload("Customer").Preload("Customer.Company").Offset(offset).Limit(pageSize).Find(&orders).Error; err != nil {
+		return nil, 0, err
+	}
+	return orders, int(totalCount), nil
 }

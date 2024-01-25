@@ -6,7 +6,7 @@ import (
 )
 
 type OrderUseCase interface {
-	GetAllOrders(page, pageSize int, orderName, product, startDate, endDate string) ([]models.Order, error)
+	GetAllOrders(page, pageSize int, orderName, product, startDate, endDate string) ([]models.Order, int, error)
 }
 
 type orderUseCase struct {
@@ -17,6 +17,6 @@ func NewOrderUseCase(orderRepo repositories.OrderRepository) OrderUseCase {
 	return &orderUseCase{orderRepo: orderRepo}
 }
 
-func (uc *orderUseCase) GetAllOrders(page, pageSize int, orderName, product, startDate, endDate string) ([]models.Order, error) {
+func (uc *orderUseCase) GetAllOrders(page, pageSize int, orderName, product, startDate, endDate string) ([]models.Order, int, error) {
 	return uc.orderRepo.GetAllOrders(page, pageSize, orderName, product, startDate, endDate)
 }
