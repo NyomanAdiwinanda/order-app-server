@@ -5,6 +5,7 @@ import (
 	"github.com/NyomanAdiwinanda/order-app-server/handlers"
 	"github.com/NyomanAdiwinanda/order-app-server/repositories"
 	"github.com/NyomanAdiwinanda/order-app-server/usecases"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -17,6 +18,13 @@ func main() {
 	orderHandler := handlers.NewOrderHandler(orderUseCase)
 
 	r := gin.Default()
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"*"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Authorization", "Content-Type"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+	}))
 
 	r.GET("/orders", orderHandler.GetAllOrders)
 	r.GET("/migrate", func(c *gin.Context) {
