@@ -26,11 +26,10 @@ func (h *OrderHandler) GetAllOrders(c *gin.Context) {
 	}
 
 	orderName := c.Query("order_name")
-	product := c.Query("product")
 	startDate := c.Query("startDate")
 	endDate := c.Query("endDate")
 
-	orders, totalCount, err := h.orderUseCase.GetAllOrders(page, pageSize, orderName, product, startDate, endDate)
+	orders, totalCount, err := h.orderUseCase.GetAllOrders(page, pageSize, orderName, startDate, endDate)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"status":  http.StatusInternalServerError,

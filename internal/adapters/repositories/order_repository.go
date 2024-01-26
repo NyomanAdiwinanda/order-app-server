@@ -1,12 +1,14 @@
 package repositories
 
 import (
+	"strings"
+
 	"github.com/NyomanAdiwinanda/order-app-server/internal/core/models"
 	"gorm.io/gorm"
 )
 
 type OrderRepository interface {
-	GetAllOrders(page, pageSize int, orderName, product, startDate, endDate string) ([]models.Order, int, error)
+	GetAllOrders(page, pageSize int, orderName, startDate, endDate string) ([]models.Order, int, error)
 }
 
 type orderRepository struct {
@@ -17,19 +19,18 @@ func NewOrderRepository(db *gorm.DB) OrderRepository {
 	return &orderRepository{db: db}
 }
 
-func (r *orderRepository) GetAllOrders(page, pageSize int, orderName, product, startDate, endDate string) ([]models.Order, int, error) {
+func (r *orderRepository) GetAllOrders(page, pageSize int, orderName, startDate, endDate string) ([]models.Order, int, error) {
 	var orders []models.Order
 	var totalCount int64
-	offset := (page - 1) * pageSize
-	query := r.db
 
-	// Implement filtering logic
+	query := r.db.Model(&models.Order{})
+
 	if orderName != "" {
-		query = query.Where("order_name LIKE ?", "%"+orderName+"%")
+		orderName = strings.ToLower(orderName)
+		subQuery := r.db.Model(&models.OrderItem{}).Select("order_id").Where("LOWER(product) LIKE ?", "%"+orderName+"%").Group("order_id")
+		query = query.Where("LOWER(order_name) LIKE ? OR id IN (?)", "%"+orderName+"%", subQuery)
 	}
-	if product != "" {
-		query = query.Where("product LIKE ?", "%"+product+"%") // Adjust based on your database schema
-	}
+
 	if startDate != "" {
 		query = query.Where("created_at >= ?", startDate)
 	}
@@ -37,12 +38,20 @@ func (r *orderRepository) GetAllOrders(page, pageSize int, orderName, product, s
 		query = query.Where("created_at <= ?", endDate)
 	}
 
-	if err := query.Model(&models.Order{}).Count(&totalCount).Error; err != nil {
+	if err := query.Count(&totalCount).Error; err != nil {
 		return nil, 0, err
 	}
 
-	if err := query.Preload("OrderItems.Delivery").Preload("Customer").Preload("Customer.Company").Offset(offset).Limit(pageSize).Find(&orders).Error; err != nil {
+	offset := (page - 1) * pageSize
+	if err := query.Preload("OrderItems").
+		Preload("OrderItems.Delivery").
+		Preload("Customer").
+		Preload("Customer.Company").
+		Offset(offset).
+		Limit(pageSize).
+		Find(&orders).Error; err != nil {
 		return nil, 0, err
 	}
+
 	return orders, int(totalCount), nil
 }
