@@ -1,9 +1,11 @@
 package handlers
 
 import (
+	"math"
 	"net/http"
 	"strconv"
 
+	"github.com/NyomanAdiwinanda/order-app-server/models"
 	"github.com/NyomanAdiwinanda/order-app-server/usecases"
 	"github.com/gin-gonic/gin"
 )
@@ -38,6 +40,8 @@ func (h *OrderHandler) GetAllOrders(c *gin.Context) {
 		return
 	}
 
+	calculateOrderAmounts(orders)
+
 	totalPage := (totalCount + pageSize - 1) / pageSize
 	hasNextPage := page < totalPage
 
@@ -62,4 +66,16 @@ func parsePaginationParams(c *gin.Context) (int, int, error) {
 	}
 
 	return page, pageSize, nil
+}
+
+func calculateOrderAmounts(orders []models.Order) {
+	for i, order := range orders {
+		var totalAmount, deliveredAmount float64
+		for _, item := range order.OrderItems {
+			totalAmount += item.PricePerUnit * float64(item.Quantity)
+			deliveredAmount += item.PricePerUnit * float64(item.Delivery.DeliveredQuantity)
+		}
+		orders[i].TotalAmount = math.Round(totalAmount*100) / 100
+		orders[i].DeliveredAmount = math.Round(deliveredAmount*100) / 100
+	}
 }
