@@ -1,6 +1,6 @@
 package utils
 
-import "github.com/NyomanAdiwinanda/order-app-server/models"
+import "github.com/NyomanAdiwinanda/order-app-server/internal/core/models"
 
 func CSVToCustomerCompanies(data [][]string) []models.CustomerCompany {
 	var CustomerCompanies []models.CustomerCompany

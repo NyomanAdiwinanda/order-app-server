@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/NyomanAdiwinanda/order-app-server/database"
-	"github.com/NyomanAdiwinanda/order-app-server/handlers"
-	"github.com/NyomanAdiwinanda/order-app-server/repositories"
-	"github.com/NyomanAdiwinanda/order-app-server/usecases"
+	"github.com/NyomanAdiwinanda/order-app-server/internal/adapters/handlers"
+	"github.com/NyomanAdiwinanda/order-app-server/internal/adapters/repositories"
+	"github.com/NyomanAdiwinanda/order-app-server/internal/core/usecases"
+	"github.com/NyomanAdiwinanda/order-app-server/internal/infrastructure/database"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )

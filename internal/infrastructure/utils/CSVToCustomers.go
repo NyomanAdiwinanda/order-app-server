@@ -3,7 +3,7 @@ package utils
 import (
 	"strconv"
 
-	"github.com/NyomanAdiwinanda/order-app-server/models"
+	"github.com/NyomanAdiwinanda/order-app-server/internal/core/models"
 )
 
 func CSVToCustomers(data [][]string) ([]models.Customer, error) {

@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/NyomanAdiwinanda/order-app-server/models"
-	"github.com/NyomanAdiwinanda/order-app-server/usecases"
+	"github.com/NyomanAdiwinanda/order-app-server/internal/core/models"
+	"github.com/NyomanAdiwinanda/order-app-server/internal/core/usecases"
 	"github.com/gin-gonic/gin"
 )
 

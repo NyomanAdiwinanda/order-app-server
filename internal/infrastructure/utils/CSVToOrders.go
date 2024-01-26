@@ -3,7 +3,7 @@ package utils
 import (
 	"time"
 
-	"github.com/NyomanAdiwinanda/order-app-server/models"
+	"github.com/NyomanAdiwinanda/order-app-server/internal/core/models"
 )
 
 func CSVToOrders(orderData [][]string) []models.Order {

@@ -1,8 +1,8 @@
 package usecases
 
 import (
-	"github.com/NyomanAdiwinanda/order-app-server/models"
-	"github.com/NyomanAdiwinanda/order-app-server/repositories"
+	"github.com/NyomanAdiwinanda/order-app-server/internal/adapters/repositories"
+	"github.com/NyomanAdiwinanda/order-app-server/internal/core/models"
 )
 
 type OrderUseCase interface {

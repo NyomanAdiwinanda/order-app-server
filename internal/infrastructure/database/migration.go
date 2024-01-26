@@ -1,7 +1,7 @@
 package database
 
 import (
-	"github.com/NyomanAdiwinanda/order-app-server/models"
+	"github.com/NyomanAdiwinanda/order-app-server/internal/core/models"
 	"gorm.io/gorm"
 )
 

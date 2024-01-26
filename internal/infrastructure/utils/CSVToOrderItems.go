@@ -3,7 +3,7 @@ package utils
 import (
 	"strconv"
 
-	"github.com/NyomanAdiwinanda/order-app-server/models"
+	"github.com/NyomanAdiwinanda/order-app-server/internal/core/models"
 )
 
 func CSVToOrderItems(data [][]string) ([]models.OrderItem, error) {
