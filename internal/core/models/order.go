@@ -9,6 +9,6 @@ type Order struct {
 	CustomerID      string      `gorm:"type:varchar;column:customer_id" json:"customer_id"`
 	Customer        Customer    `json:"customer" gorm:"foreignKey:CustomerID"`
 	OrderItems      []OrderItem `json:"order_items" gorm:"foreignKey:OrderID"`
-	TotalAmount     float64     `json:"total_amount"`
-	DeliveredAmount float64     `json:"delivered_amount"`
+	TotalAmount     float64     `json:"total_amount" gorm:"-"`
+	DeliveredAmount float64     `json:"delivered_amount" gorm:"-"`
 }
