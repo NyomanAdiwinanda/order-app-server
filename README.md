@@ -14,7 +14,7 @@ git clone https://github.com/NyomanAdiwinanda/order-app-server.git
 
 #### 2) Configure Env File
 
-inside the project repo, **rename** the file `.env.example` to `.env`
+open the project repo using your code editor, **rename** the file `.env.example` to `.env`
 
 and inside that `.env` file, you will find something like this
 
@@ -62,7 +62,7 @@ It will return you a json like below if seeder is success
 
 The project setup is now fully completed
 
-## About the Project
+## Project Structure
 
 The structure of this project is as given below
 
@@ -86,4 +86,21 @@ order-app-server/
 │       └── /utils          # Utility functions and common helpers.
 │
 └── /csv    # For storing all the required CSV files.
+```
+
+## API Endpoints Documentation
+
+This projects has 3 endpoints
+
+```
+GET /migrate                # For migrating the DB
+GET /seed                   # For seeding the data from CSV files to DB
+
+GET /orders                 # For fetching orders data
+
+Query Params:
+- /orders?page=            # Get the orders data on given page (5 data per page)
+- /orders?order_name=      # Get the orders data where order name or product name is match or alike by given order_name
+- /orders?startDate=       # Get the orders data where the order date is on or after the given startDate
+- /orders?endDate=         # Get the orders data where the order date is on or before the given endDate
 ```
